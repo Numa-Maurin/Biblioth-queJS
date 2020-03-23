@@ -1,10 +1,13 @@
-let xhr = new XMLHttpRequest();
+let xhrAdherent = new XMLHttpRequest();
+let xhrLivre = new XMLHttpRequest();
 let div_adherent = document.getElementById("listeAdherents");
+let div_LivreDispo = document.getElementById("listeLivresDisponibles");
 charger_adherent();
+charger_livres();
 
 function callback() {
 
-    let tab = JSON.parse(xhr.responseText);
+    let tab = JSON.parse(xhrAdherent.responseText);
     div_adherent.innerHTML = "";
 
     for (let i = 0; i != tab.length; i ++) {
@@ -14,9 +17,29 @@ function callback() {
 }
 
 function charger_adherent() {
-	let url = 'http://localhost/td7-numa-maurin/src/php/recherche.php';
+	let url = 'http://localhost/td7-numa-maurin/src/php/collecteAdherent.php';
 
-	xhr.open("GET", url, true);
-	xhr.addEventListener('load', callback);
-	xhr.send(null);
+	xhrAdherent.open("GET", url, true);
+	xhrAdherent.addEventListener('load', callback);
+	xhrAdherent.send(null);
+}
+
+
+function callback_livre() {
+
+    let tab = JSON.parse(xhrLivre.responseText);
+    div_LivreDispo.innerHTML = "";
+
+    for (let i = 0; i != tab.length; i ++) {
+        div_LivreDispo.innerHTML = div_LivreDispo.innerHTML + "<p>" + tab[i].idLivre + "-"+ tab[i].titreLivre+"</p>";
+    } 
+
+}
+
+function charger_livres() {
+	let url = 'http://localhost/td7-numa-maurin/src/php/collecteLivreDispo.php';
+
+	xhrLivre.open("GET", url, true);
+	xhrLivre.addEventListener('load', callback_livre);
+	xhrLivre.send(null);
 }

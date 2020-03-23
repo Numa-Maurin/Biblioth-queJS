@@ -43,6 +43,25 @@ class Model {
         }
     }
 
+    
+    public static function reqLivresDispo() {
+        try {
+            // préparation de la requête
+            $sql = "SELECT * FROM livre WHERE idLivre NOT IN (SELECT idLivre FROM EMPRUNT) ";
+            $req_prep = self::$pdo->prepare($sql);
+            $l = "";
+            $values = array("name_tag" => $l);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
+
 }
 
 // on initialise la connexion $pdo
