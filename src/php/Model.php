@@ -65,7 +65,7 @@ class Model {
     public static function reqLivresDispo() {
         try {
             // préparation de la requête
-            $sql = "SELECT * FROM livre WHERE idLivre NOT IN (SELECT idLivre FROM EMPRUNT) ";
+            $sql = "SELECT * FROM livre WHERE idLivre NOT IN (SELECT idLivre FROM emprunt) ";
             $req_prep = self::$pdo->prepare($sql);
             $l = "";
             $values = array("name_tag" => $l);
@@ -84,7 +84,7 @@ class Model {
     public static function reqLivresEmpruntes() {
         try {
             // préparation de la requête
-            $sql = "SELECT * FROM livre WHERE idLivre IN (SELECT idLivre FROM EMPRUNT) ";
+            $sql = "SELECT * FROM livre WHERE idLivre IN (SELECT idLivre FROM emprunt) ";
             $req_prep = self::$pdo->prepare($sql);
             $l = "";
             $values = array("name_tag" => $l);

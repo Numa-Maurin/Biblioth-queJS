@@ -22,7 +22,7 @@ function callback() {
 }
 
 function charger_adherent() {
-	let url = 'http://localhost/td7-numa-maurin/src/php/collecteAdherent.php';
+	let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/td7-Numa-Maurin/src/php/collecteAdherent.php';
 
 	xhrAdherent.open("GET", url, true);
 	xhrAdherent.addEventListener('load', callback);
@@ -42,7 +42,7 @@ function callback_livre() {
 }
 
 function charger_livres() {
-	let url = 'http://localhost/td7-numa-maurin/src/php/collecteLivreDispo.php';
+	let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/td7-Numa-Maurin/src/php/collecteLivreDispo.php';
 
 	xhrLivre.open("GET", url, true);
 	xhrLivre.addEventListener('load', callback_livre);
@@ -63,7 +63,7 @@ function callback_livreEmpruntes() {
 }
 
 function charger_livresEmpruntes() {
-	let url = 'http://localhost/td7-numa-maurin/src/php/collecteLivreEmpruntes.php';
+	let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/td7-Numa-Maurin/src/php/collecteLivreEmpruntes.php';
 
 	xhrLivreE.open("GET", url, true);
 	xhrLivreE.addEventListener('load', callback_livreEmpruntes);
