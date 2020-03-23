@@ -1,9 +1,14 @@
 let xhrAdherent = new XMLHttpRequest();
+let xhrAjoutAdherent = new XMLHttpRequest();
 let xhrLivre = new XMLHttpRequest();
+let xhrLivreE = new XMLHttpRequest();
 let div_adherent = document.getElementById("listeAdherents");
 let div_LivreDispo = document.getElementById("listeLivresDisponibles");
+let div_LivreEmpruntés = document.getElementById("listeLivresEmpruntes");
+
 charger_adherent();
 charger_livres();
+charger_livresEmpruntes();
 
 function callback() {
 
@@ -42,4 +47,25 @@ function charger_livres() {
 	xhrLivre.open("GET", url, true);
 	xhrLivre.addEventListener('load', callback_livre);
 	xhrLivre.send(null);
+}
+
+
+
+function callback_livreEmpruntes() {
+
+    let tab = JSON.parse(xhrLivreE.responseText);
+    div_LivreEmpruntés.innerHTML = "";
+
+    for (let i = 0; i != tab.length; i ++) {
+        div_LivreEmpruntés.innerHTML = div_LivreEmpruntés.innerHTML + "<p>" + tab[i].idLivre + "-"+ tab[i].titreLivre+"</p>";
+    } 
+
+}
+
+function charger_livresEmpruntes() {
+	let url = 'http://localhost/td7-numa-maurin/src/php/collecteLivreEmpruntes.php';
+
+	xhrLivreE.open("GET", url, true);
+	xhrLivreE.addEventListener('load', callback_livreEmpruntes);
+	xhrLivreE.send(null);
 }

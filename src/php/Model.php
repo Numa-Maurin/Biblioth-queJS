@@ -24,6 +24,24 @@ class Model {
         }
     }
 
+
+    public static function addAdherent($nom) {
+        try {
+            // préparation de la requête
+            $sql = "INSERT INTO adherent(nomAdherent) VALUES ($nom)";
+            $req_prep = self::$pdo->prepare($sql);
+            $l = "";
+            $values = array("name_tag" => $l);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
     
     public static function reqAdherent() {
         try {
@@ -61,6 +79,27 @@ class Model {
             die("Erreur lors de la recherche dans la base de données.");
         }
     }
+
+    
+    public static function reqLivresEmpruntes() {
+        try {
+            // préparation de la requête
+            $sql = "SELECT * FROM livre WHERE idLivre IN (SELECT idLivre FROM EMPRUNT) ";
+            $req_prep = self::$pdo->prepare($sql);
+            $l = "";
+            $values = array("name_tag" => $l);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
+
+
 
 }
 
