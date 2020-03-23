@@ -24,6 +24,25 @@ class Model {
         }
     }
 
+    
+    public static function reqAdherent() {
+        try {
+            // préparation de la requête
+            $sql = "SELECT * FROM adherent ";
+            $req_prep = self::$pdo->prepare($sql);
+            $l = "";
+            $values = array("name_tag" => $l);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
+
 }
 
 // on initialise la connexion $pdo
