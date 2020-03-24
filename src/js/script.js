@@ -1,6 +1,7 @@
 //requetes AJAX
 let xhrAdherent = new XMLHttpRequest();
 let xhrAjoutAdherent = new XMLHttpRequest();
+let xhrAjoutLivre = new XMLHttpRequest();
 let xhrNombreEmprunts = new XMLHttpRequest();
 let xhrLivre = new XMLHttpRequest();
 let xhrLivreE = new XMLHttpRequest();
@@ -27,6 +28,20 @@ boutonAjout.addEventListener("click",function(){
     });
     xhrAjoutAdherent.send(null);
     charger_adherent();
+ })
+
+//ajout livre
+let zonesaisieLivre= document.getElementById("titreLivre");
+let boutonAjoutLivre= document.getElementById("ajouterLivre");
+boutonAjoutLivre.addEventListener("click",function(){ 
+    let url = "http://webinfo.iutmontp.univ-montp2.fr/~maurinn/td7-Numa-Maurin/src/php/ajoutlivre.php?nom='"+zonesaisieLivre.value+"'";
+    xhrAjoutLivre.open("GET", url, true);
+    xhrAjoutLivre.addEventListener('load', function(){
+        alert("le livre "+zonesaisieLivre.value+" a été ajouté");
+        zonesaisieLivre.value='';
+    });
+    xhrAjoutLivre.send(null);
+    charger_livres();
  })
 
 
