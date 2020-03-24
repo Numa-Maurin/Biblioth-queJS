@@ -15,6 +15,20 @@ charger_adherent();
 charger_livres();
 charger_livresEmpruntes();
 
+//ajout adherent
+let zonesaisie= document.getElementById("nomAdherent");
+let boutonAjout= document.getElementById("ajouterAdherent");
+boutonAjout.addEventListener("click",function(){ 
+    let url = "http://webinfo.iutmontp.univ-montp2.fr/~maurinn/td7-Numa-Maurin/src/php/ajoutAdherent.php?nom='"+zonesaisie.value+"'";
+    xhrAjoutAdherent.open("GET", url, true);
+    xhrAjoutAdherent.addEventListener('load', function(){
+        alert("l'utilisateur "+zonesaisie.value+" a été ajouté");
+        zonesaisie.value='';
+    });
+    xhrAjoutAdherent.send(null);
+    charger_adherent();
+ })
+
 
 //affichage des adherents dans leurs div
 function callback() {
@@ -66,7 +80,6 @@ function maj_NombreEmprunts() {
 	xhrNombreEmprunts.addEventListener('load', callback_NombreEmprunts);
 	xhrNombreEmprunts.send(null);
 }
-
 
 
 //affichage des livres disponibles
