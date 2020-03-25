@@ -172,7 +172,7 @@ class Model {
     public static function reqRecupererLivre($idLivre){
         try {
             // préparation de la requête
-            $sql = "DELETE FROM `emprunt` WHERE idLivre =: idLivre_tag";
+            $sql = "DELETE FROM `emprunt` WHERE idLivre =:idLivre_tag";
             $req_prep = self::$pdo->prepare($sql);
             $values = array("idLivre_tag" => $idLivre);
             // exécution
