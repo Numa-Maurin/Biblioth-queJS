@@ -120,7 +120,7 @@ class Model {
     public static function reqMaj_NombreEmprunts() {
         try {
             // préparation de la requête
-            $sql = "SELECT idAdherent,COUNT(idAdherent) AS nbEmprunt FROM `emprunt` GROUP BY idAdherent";
+            $sql = "SELECT idAdherent,COUNT(idAdherent) AS nbEmprunt, idLivre FROM `emprunt` GROUP BY idAdherent";
             $req_prep = self::$pdo->prepare($sql);
             $l = "";
             $values = array("name_tag" => $l);
@@ -135,8 +135,58 @@ class Model {
         }
     }
 
-}
+    public static function reqMaj_LivresDunAdherent($idAdherent){
+        try {
+            // préparation de la requête
+            $sql = "SELECT titreLivre FROM `emprunt` e JOIN `livre` l ON e.idLivre = l.idLivre WHERE idAdherent=:name_tag";
+            $req_prep = self::$pdo->prepare($sql);
+            $values = array("name_tag" => $idAdherent);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
 
+    public static function reqPreterLivre($idAdherent, $idLivre){
+        try {
+            // préparation de la requête
+            $sql = "INSERT INTO emprunt(idAdherent,idLivre) VALUES (:idAdherent_tag, :idLivre_tag)";
+            $req_prep = self::$pdo->prepare($sql);
+            $values = array("idAdherent_tag" => $idAdherent, "idLivre_tag" => $idLivre);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
+
+    public static function reqRecupererLivre($idLivre){
+        try {
+            // préparation de la requête
+            $sql = "DELETE FROM `emprunt` WHERE idLivre =: idLivre_tag";
+            $req_prep = self::$pdo->prepare($sql);
+            $values = array("idLivre_tag" => $idLivre);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
+
+}
 // on initialise la connexion $pdo
 Model::init_pdo();
 
