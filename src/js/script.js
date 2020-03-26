@@ -36,7 +36,7 @@ boutonAjout.addEventListener("click",function(){
 let zonesaisieLivre= document.getElementById("titreLivre");
 let boutonAjoutLivre= document.getElementById("ajouterLivre");
 boutonAjoutLivre.addEventListener("click",function(){
-    let url = "http://localhost/JS/td7/src/php/ajoutlivre.php?nom="+zonesaisieLivre.value;
+    let url = "http://localhost/JS/td7/src/php/ajoutLivre.php?nom="+zonesaisieLivre.value;
     xhrAjoutLivre.open("GET", url, true);
     xhrAjoutLivre.addEventListener('load', function(){
         alert("Le livre "+zonesaisieLivre.value+" a été ajouté.");
