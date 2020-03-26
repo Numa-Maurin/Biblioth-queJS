@@ -30,7 +30,7 @@ function callback_ajoutAdherent(){
 }
 
 function ajoutAdherent(){
-    let url = "http://localhost/JS/td7/src/php/ajoutAdherent.php?nom="+zonesaisie.value;
+    let url = "http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/ajoutAdherent.php?nom="+zonesaisie.value;
     xhrAjoutAdherent.open("GET", url, true);
     xhrAjoutAdherent.addEventListener('load',callback_ajoutAdherent);
     xhrAjoutAdherent.send(null);
@@ -48,7 +48,7 @@ function callback_ajoutLivre(){
 }
 
 function ajoutLivre(){
-    let url = "http://localhost/JS/td7/src/php/ajoutLivre.php?nom="+zonesaisieLivre.value;
+    let url = "http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/ajoutLivre.php?nom="+zonesaisieLivre.value;
     xhrAjoutLivre.open("GET", url, true);
     xhrAjoutLivre.addEventListener('load', callback_ajoutLivre);
     xhrAjoutLivre.send(null);
@@ -79,7 +79,7 @@ function charger_adherent() {
 		div_adherent.removeChild(div_adherent.children[0]);
     }
 
-	let url = 'http://localhost/JS/td7/src/php/collecteAdherent.php';
+	let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/collecteAdherent.php';
 
 	xhrAdherent.open("GET", url, true);
 	xhrAdherent.addEventListener('load', callback);
@@ -112,7 +112,7 @@ function charger_livres() {
 		div_LivreDispo.removeChild(div_LivreDispo.children[0]);
     }
 
-	let url = 'http://localhost/JS/td7/src/php/collecteLivreDispo.php';
+	let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/collecteLivreDispo.php';
 
 	xhrLivre.open("GET", url, true);
 	xhrLivre.addEventListener('load', callback_livre);
@@ -142,7 +142,7 @@ function charger_livresEmpruntes() {
     while(div_LivreEmpruntes.children.length > 0){
 		div_LivreEmpruntes.removeChild(div_LivreEmpruntes.children[0]);
     }
-	let url = 'http://localhost/JS/td7/src/php/collecteLivreEmpruntes.php';
+	let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/collecteLivreEmpruntes.php';
 	xhrLivreE.open("GET", url, true);
 	xhrLivreE.addEventListener('load', callback_livreEmpruntes);
 	xhrLivreE.send(null);
@@ -172,7 +172,7 @@ function callback_LivresDunAdherent() {
     let tabReponse = JSON.parse(xhrNomDunAdherent.responseText);
     console.log(tabReponse);
     nomAdherentClick = tabReponse[0].nomAdherent;
-    let url = 'http://localhost/JS/td7/src/php/LivresDunAdherent.php?idAdherent='+tabReponse[0].idAdherent;
+    let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/LivresDunAdherent.php?idAdherent='+tabReponse[0].idAdherent;
     xhrLivresDunAdherent.open("GET", url, true);
     xhrLivresDunAdherent.addEventListener('load', callback_LivresSuite);
     xhrLivresDunAdherent.send(null);
@@ -180,7 +180,7 @@ function callback_LivresDunAdherent() {
 
 
 function recupererLivresDunAdherent(idAdherent) {
-    let url = 'http://localhost/JS/td7/src/php/nomDunAdherent.php?idAdherent='+idAdherent;
+    let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/nomDunAdherent.php?idAdherent='+idAdherent;
     xhrNomDunAdherent.open("GET", url, true);
     xhrNomDunAdherent.addEventListener('load', callback_LivresDunAdherent);
     xhrNomDunAdherent.send(null);
@@ -196,7 +196,7 @@ function callback_PreterRecupererLivre(){
 function preterLivre(idLivre, titreLivre){
     let idAdherent = prompt("prêt de \""+ titreLivre + "\".\nn° de l'emprunteur ?", "");
     idAdherent = parseInt(idAdherent);
-    let url = "http://localhost/JS/td7/src/php/PreterLivre.php?idAdherent="+idAdherent+"&idLivre="+idLivre;
+    let url = "http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/PreterLivre.php?idAdherent="+idAdherent+"&idLivre="+idLivre;
     xhrPreterLivre.open("GET", url, true);
     xhrPreterLivre.addEventListener('load', callback_PreterRecupererLivre);
     xhrPreterLivre.send(null);
@@ -208,7 +208,7 @@ function callback_RecupererAdherentDuLivre(){
     let nomAdherentDuLivre= JSON.parse(xhrRecupererAdherentDuLivre.responseText);
     let messageConfirm = "Livre prêté à "+nomAdherentDuLivre[0].nomAdherent+".\nRetour de ce livre ?";
     if(confirm(messageConfirm)){
-        let url = 'http://localhost/JS/td7/src/php/RecupererLivre.php?idLivre='+nomAdherentDuLivre[0].idLivre;
+        let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/RecupererLivre.php?idLivre='+nomAdherentDuLivre[0].idLivre;
         xhrRecupererLivre.open("GET", url, true);
         xhrRecupererLivre.addEventListener('load', callback_PreterRecupererLivre);
         xhrRecupererLivre.send(null);
@@ -216,7 +216,7 @@ function callback_RecupererAdherentDuLivre(){
 }
 
 function recupererAdherentDuLivre(idLivre){
-    let url = 'http://localhost/JS/td7/src/php/RecupererAdherentDuLivre.php?idLivre='+idLivre;
+    let url = 'http://webinfo.iutmontp.univ-montp2.fr/~maurinn/src/php/RecupererAdherentDuLivre.php?idLivre='+idLivre;
     xhrRecupererAdherentDuLivre.open("GET", url, true);
     xhrRecupererAdherentDuLivre.addEventListener('load', callback_RecupererAdherentDuLivre);
     xhrRecupererAdherentDuLivre.send(null);
