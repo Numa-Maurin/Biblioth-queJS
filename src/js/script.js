@@ -21,30 +21,39 @@ let nomAdherentClick = null;
 //ajout adherent
 let zonesaisie= document.getElementById("nomAdherent");
 let boutonAjout= document.getElementById("ajouterAdherent");
-boutonAjout.addEventListener("click",function(){ 
+
+
+function callback_ajoutAdherent(){
+    charger_adherent();
+    alert("L'adhérent "+zonesaisie.value+" a été ajouté.");
+    zonesaisie.value='';
+}
+
+function ajoutAdherent(){
     let url = "http://localhost/JS/td7/src/php/ajoutAdherent.php?nom="+zonesaisie.value;
     xhrAjoutAdherent.open("GET", url, true);
-    xhrAjoutAdherent.addEventListener('load', function(){
-        alert("L'adhérent "+zonesaisie.value+" a été ajouté.");
-        zonesaisie.value='';
-    });
+    xhrAjoutAdherent.addEventListener('load',callback_ajoutAdherent);
     xhrAjoutAdherent.send(null);
-    charger_adherent();
- })
+}
+boutonAjout.addEventListener("click",ajoutAdherent);
 
 //ajout livre
 let zonesaisieLivre= document.getElementById("titreLivre");
 let boutonAjoutLivre= document.getElementById("ajouterLivre");
-boutonAjoutLivre.addEventListener("click",function(){
+
+function callback_ajoutLivre(){
+    charger_livres();
+    alert("Le livre "+zonesaisieLivre.value+" a été ajouté.");
+    zonesaisieLivre.value='';
+}
+
+function ajoutLivre(){
     let url = "http://localhost/JS/td7/src/php/ajoutLivre.php?nom="+zonesaisieLivre.value;
     xhrAjoutLivre.open("GET", url, true);
-    xhrAjoutLivre.addEventListener('load', function(){
-        alert("Le livre "+zonesaisieLivre.value+" a été ajouté.");
-        zonesaisieLivre.value='';
-    });
+    xhrAjoutLivre.addEventListener('load', callback_ajoutLivre);
     xhrAjoutLivre.send(null);
-    charger_livres();
- })
+}
+boutonAjoutLivre.addEventListener("click",ajoutLivre);
 
 
 //affichage des adherents dans leurs div
