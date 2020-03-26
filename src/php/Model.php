@@ -28,10 +28,9 @@ class Model {
     public static function addAdherent($nom) {
         try {
             // préparation de la requête
-            $sql = "INSERT INTO adherent(nomAdherent) VALUES ($nom)";
+            $sql = "INSERT INTO adherent(nomAdherent) VALUES (:name_tag)";
             $req_prep = self::$pdo->prepare($sql);
-            $l = "";
-            $values = array("name_tag" => $l);
+            $values = array("name_tag" => $nom);
             // exécution
             $req_prep->execute($values);
             $tabResults = $req_prep->fetchAll();
@@ -46,10 +45,9 @@ class Model {
     public static function addlivre($nom) {
         try {
             // préparation de la requête
-            $sql = "INSERT INTO livre(titreLivre) VALUES ($nom)";
+            $sql = "INSERT INTO livre(titreLivre) VALUES (:name_tag)";
             $req_prep = self::$pdo->prepare($sql);
-            $l = "";
-            $values = array("name_tag" => $l);
+            $values = array("name_tag" => $nom);
             // exécution
             $req_prep->execute($values);
             $tabResults = $req_prep->fetchAll();
@@ -117,13 +115,12 @@ class Model {
         }
     }
 
-    public static function reqMaj_NombreEmprunts() {
+    public static function reqMaj_LivresDunAdherent($idAdherent){
         try {
             // préparation de la requête
-            $sql = "SELECT idAdherent,COUNT(idAdherent) AS nbEmprunt, idLivre FROM `emprunt` GROUP BY idAdherent";
+            $sql = "SELECT titreLivre FROM `emprunt` e JOIN `livre` l ON e.idLivre = l.idLivre WHERE idAdherent =:name_tag";
             $req_prep = self::$pdo->prepare($sql);
-            $l = "";
-            $values = array("name_tag" => $l);
+            $values = array("name_tag" => $idAdherent);
             // exécution
             $req_prep->execute($values);
             $tabResults = $req_prep->fetchAll();
@@ -135,10 +132,10 @@ class Model {
         }
     }
 
-    public static function reqMaj_LivresDunAdherent($idAdherent){
+    public static function reqNomDunAdherent($idAdherent){
         try {
             // préparation de la requête
-            $sql = "SELECT titreLivre FROM `emprunt` e JOIN `livre` l ON e.idLivre = l.idLivre WHERE idAdherent=:name_tag";
+            $sql = "SELECT idAdherent, nomAdherent FROM `adherent` WHERE idAdherent =:name_tag";
             $req_prep = self::$pdo->prepare($sql);
             $values = array("name_tag" => $idAdherent);
             // exécution
@@ -173,6 +170,23 @@ class Model {
         try {
             // préparation de la requête
             $sql = "DELETE FROM `emprunt` WHERE idLivre =:idLivre_tag";
+            $req_prep = self::$pdo->prepare($sql);
+            $values = array("idLivre_tag" => $idLivre);
+            // exécution
+            $req_prep->execute($values);
+            $tabResults = $req_prep->fetchAll();
+            // tableau résultat retourné
+            return $tabResults;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die("Erreur lors de la recherche dans la base de données.");
+        }
+    }
+
+    public static function reqRecupererAdherentDuLivre($idLivre){
+        try {
+            // préparation de la requête
+            $sql = "SELECT nomAdherent, idLivre FROM emprunt e JOIN adherent a ON e.idAdherent=a.idAdherent WHERE idLivre =:idLivre_tag";
             $req_prep = self::$pdo->prepare($sql);
             $values = array("idLivre_tag" => $idLivre);
             // exécution

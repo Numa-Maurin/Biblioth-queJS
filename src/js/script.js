@@ -2,10 +2,11 @@
 let xhrAdherent = new XMLHttpRequest();
 let xhrAjoutAdherent = new XMLHttpRequest();
 let xhrAjoutLivre = new XMLHttpRequest();
+let xhrNomDunAdherent = new XMLHttpRequest();
 let xhrLivresDunAdherent = new XMLHttpRequest();
 let xhrPreterLivre = new XMLHttpRequest();
+let xhrRecupererAdherentDuLivre = new XMLHttpRequest();
 let xhrRecupererLivre = new XMLHttpRequest();
-let xhrNombreEmprunts = new XMLHttpRequest();
 let xhrLivre = new XMLHttpRequest();
 let xhrLivreE = new XMLHttpRequest();
 
@@ -14,14 +15,17 @@ let div_adherent = document.getElementById("listeAdherents");
 let div_LivreDispo = document.getElementById("listeLivresDisponibles");
 let div_LivreEmpruntes = document.getElementById("listeLivresEmpruntes");
 
+//Variables globales
+let nomAdherentClick = null;
+
 //ajout adherent
 let zonesaisie= document.getElementById("nomAdherent");
 let boutonAjout= document.getElementById("ajouterAdherent");
 boutonAjout.addEventListener("click",function(){ 
-    let url = "http://localhost/JS/td7/src/php/ajoutAdherent.php?nom='"+zonesaisie.value+"'";
+    let url = "http://localhost/JS/td7/src/php/ajoutAdherent.php?nom="+zonesaisie.value;
     xhrAjoutAdherent.open("GET", url, true);
     xhrAjoutAdherent.addEventListener('load', function(){
-        alert("l'utilisateur "+zonesaisie.value+" a été ajouté");
+        alert("L'adhérent "+zonesaisie.value+" a été ajouté.");
         zonesaisie.value='';
     });
     xhrAjoutAdherent.send(null);
@@ -32,10 +36,10 @@ boutonAjout.addEventListener("click",function(){
 let zonesaisieLivre= document.getElementById("titreLivre");
 let boutonAjoutLivre= document.getElementById("ajouterLivre");
 boutonAjoutLivre.addEventListener("click",function(){
-    let url = "http://localhost/JS/td7/src/php/ajoutlivre.php?nom='"+zonesaisieLivre.value+"'";
+    let url = "http://localhost/JS/td7/src/php/ajoutlivre.php?nom="+zonesaisieLivre.value;
     xhrAjoutLivre.open("GET", url, true);
     xhrAjoutLivre.addEventListener('load', function(){
-        alert("le livre "+zonesaisieLivre.value+" a été ajouté");
+        alert("Le livre "+zonesaisieLivre.value+" a été ajouté.");
         zonesaisieLivre.value='';
     });
     xhrAjoutLivre.send(null);
@@ -53,11 +57,9 @@ function callback() {
 
     for (let i = 0; i != tab.length; i ++) {
         let li = document.createElement("li");
-        li.id =tab[i].idAdherent;
         li.innerHTML = tab[i].idAdherent + "-"+ tab[i].nomAdherent;
         li.setAttribute("onclick","recupererLivresDunAdherent('"+tab[i].idAdherent+"')");
         div_adherent.children[0].appendChild(li);
-
     }
 
 }
@@ -88,7 +90,6 @@ function callback_livre() {
 
     for (let i = 0; i != tab.length; i ++) {
         let li = document.createElement("li");
-        li.id ="liv"+tab[i].idLivre;
         li.innerHTML =  tab[i].idLivre + "-"+ tab[i].titreLivre;
         li.setAttribute("onclick", "preterLivre('"+tab[i].idLivre+"','"+tab[i].titreLivre+"')");
         div_LivreDispo.children[0].appendChild(li);
@@ -120,9 +121,8 @@ function callback_livreEmpruntes() {
 
     for (let i = 0; i != tab.length; i ++) {
         let li = document.createElement("li");
-        li.id ="liv"+tab[i].idLivre;
         li.innerHTML =  tab[i].idLivre + "-"+ tab[i].titreLivre;
-        li.setAttribute("onclick", "recupererLivre('"+tab[i].idLivre+"')");
+        li.setAttribute("onclick", "recupererAdherentDuLivre('"+tab[i].idLivre+"')");
         div_LivreEmpruntes.children[0].appendChild(li);
     }
 
@@ -133,59 +133,48 @@ function charger_livresEmpruntes() {
     while(div_LivreEmpruntes.children.length > 0){
 		div_LivreEmpruntes.removeChild(div_LivreEmpruntes.children[0]);
     }
-
 	let url = 'http://localhost/JS/td7/src/php/collecteLivreEmpruntes.php';
-
 	xhrLivreE.open("GET", url, true);
 	xhrLivreE.addEventListener('load', callback_livreEmpruntes);
 	xhrLivreE.send(null);
 }
 
-
-
-//mise a jour du nombre d'emprunts par adherent
-/*
-function callback_NombreEmprunts() {
-
-    let tab = JSON.parse(xhrNombreEmprunts.responseText);
-    for (let i = 0; i != tab.length; i ++) {
-        let li = document.getElementById(tab[i].idAdherent);
-        li.innerHTML = li.innerHTML+ "(emprunts :" +tab[i].nbEmprunt+")";
-    }
-}
-
-function maj_NombreEmprunts() {
-    let url = 'http://localhost/JS/td7/src/php/maj_NombreEmprunts.php';
-
-	xhrNombreEmprunts.open("GET", url, true);
-	xhrNombreEmprunts.addEventListener('load', callback_NombreEmprunts);
-	xhrNombreEmprunts.send(null);
-}
-
-*/
 //Click sur adhérent
-function callback_LivresDunAdherent() {
-
+function callback_LivresSuite(){
     let tab = JSON.parse(xhrLivresDunAdherent.responseText);
-    let message = "";
-    if(tab.length>1){
-        message = " a " + tab.length + " emprunts : \n\n";
+    let message = nomAdherentClick;
+    if(tab.length == 1){
+        message += " a " + tab.length + " emprunt en ce moment : \n\n";
+    }
+    else if(tab.length == 0){
+        message += " a " + tab.length + " emprunt en ce moment.\n";
     }
     else{
-        message = " a " + tab.length + " emprunt.\n";
+        message += " a " + tab.length + " emprunts en ce moment : \n\n";
     }
 
     for(let i = 0; i < tab.length;i++){
         message += "- "+tab[i].titreLivre + "\n";
     }
-    alert(message)
+    alert(message);
 }
 
-function recupererLivresDunAdherent(idAdherent, nomAdherent) {
-    let url = 'http://localhost/JS/td7/src/php/LivresDunAdherent.php?idAdherent='+idAdherent;
+function callback_LivresDunAdherent() {
+    let tabReponse = JSON.parse(xhrNomDunAdherent.responseText);
+    console.log(tabReponse);
+    nomAdherentClick = tabReponse[0].nomAdherent;
+    let url = 'http://localhost/JS/td7/src/php/LivresDunAdherent.php?idAdherent='+tabReponse[0].idAdherent;
     xhrLivresDunAdherent.open("GET", url, true);
-    xhrLivresDunAdherent.addEventListener('load', callback_LivresDunAdherent);
+    xhrLivresDunAdherent.addEventListener('load', callback_LivresSuite);
     xhrLivresDunAdherent.send(null);
+}
+
+
+function recupererLivresDunAdherent(idAdherent) {
+    let url = 'http://localhost/JS/td7/src/php/nomDunAdherent.php?idAdherent='+idAdherent;
+    xhrNomDunAdherent.open("GET", url, true);
+    xhrNomDunAdherent.addEventListener('load', callback_LivresDunAdherent);
+    xhrNomDunAdherent.send(null);
 }
 
 //Click pour preter un livre
@@ -196,7 +185,7 @@ function callback_PreterRecupererLivre(){
 }
 
 function preterLivre(idLivre, titreLivre){
-    let idAdherent = prompt("prêt de\""+ titreLivre + "\".\nn° de l'emprunteur ?", "");
+    let idAdherent = prompt("prêt de \""+ titreLivre + "\".\nn° de l'emprunteur ?", "");
     idAdherent = parseInt(idAdherent);
     let url = "http://localhost/JS/td7/src/php/PreterLivre.php?idAdherent="+idAdherent+"&idLivre="+idLivre;
     xhrPreterLivre.open("GET", url, true);
@@ -206,13 +195,22 @@ function preterLivre(idLivre, titreLivre){
 
 //Click pour récuperer un livre
 
-function recupererLivre(idLivre){
-    if(confirm("Retour de ce livre ?")){
-        let url = 'http://localhost/JS/td7/src/php/RecupererLivre.php?idLivre='+idLivre;
+function callback_RecupererAdherentDuLivre(){
+    let nomAdherentDuLivre= JSON.parse(xhrRecupererAdherentDuLivre.responseText);
+    let messageConfirm = "Livre prêté à "+nomAdherentDuLivre[0].nomAdherent+".\nRetour de ce livre ?";
+    if(confirm(messageConfirm)){
+        let url = 'http://localhost/JS/td7/src/php/RecupererLivre.php?idLivre='+nomAdherentDuLivre[0].idLivre;
         xhrRecupererLivre.open("GET", url, true);
         xhrRecupererLivre.addEventListener('load', callback_PreterRecupererLivre);
         xhrRecupererLivre.send(null);
     }
+}
+
+function recupererAdherentDuLivre(idLivre){
+    let url = 'http://localhost/JS/td7/src/php/RecupererAdherentDuLivre.php?idLivre='+idLivre;
+    xhrRecupererAdherentDuLivre.open("GET", url, true);
+    xhrRecupererAdherentDuLivre.addEventListener('load', callback_RecupererAdherentDuLivre);
+    xhrRecupererAdherentDuLivre.send(null);
 }
 
 
